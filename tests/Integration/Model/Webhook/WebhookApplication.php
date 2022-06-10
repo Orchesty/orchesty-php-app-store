@@ -52,7 +52,7 @@ final class WebhookApplication extends ApplicationAbstract implements WebhookApp
     /**
      * @return string
      */
-    public function getKey(): string
+    public function getName(): string
     {
         return 'webhook';
     }
@@ -60,7 +60,7 @@ final class WebhookApplication extends ApplicationAbstract implements WebhookApp
     /**
      * @return string
      */
-    public function getName(): string
+    public function getPublicName(): string
     {
         return 'Webhook';
     }
