@@ -6,6 +6,7 @@ use Exception;
 use Hanaboso\HbPFAppStore\Handler\ApplicationHandler;
 use Hanaboso\PipesPhpSdk\Application\Base\ApplicationAbstract;
 use Hanaboso\PipesPhpSdk\Application\Document\ApplicationInstall;
+use Hanaboso\Utils\File\File;
 use Hanaboso\Utils\String\Json;
 use HbPFAppStoreTests\ControllerTestCaseAbstract;
 use HbPFAppStoreTests\Integration\Model\NullApplication;
@@ -27,9 +28,7 @@ final class ApplicationControllerTest extends ControllerTestCaseAbstract
      */
     public function testGetUsersApplication(): void
     {
-        $this->mockApplicationHandler(
-            Json::decode((string) file_get_contents(sprintf('%s/data/data.json', __DIR__))),
-        );
+        $this->mockApplicationHandler(Json::decode(File::getContent(sprintf('%s/data/data.json', __DIR__))));
 
         self::$client->request('GET', '/applications/users/bar');
         $response = self::$client->getResponse();
@@ -67,7 +66,7 @@ final class ApplicationControllerTest extends ControllerTestCaseAbstract
         $application = self::createMock(ApplicationAbstract::class);
         $application->method('toArray')->willReturn(['user' => 'bar']);
         $application->method('getApplicationForm')->willReturn([]);
-        self::$container->set('hbpf.application.someApp', $application);
+        self::getContainer()->set('hbpf.application.someApp', $application);
 
         $response = (array) $this->sendGet('/applications/someApp/users/bar');
         self::assertEquals('200', $response['status']);
@@ -98,7 +97,7 @@ final class ApplicationControllerTest extends ControllerTestCaseAbstract
     public function testInstallApplication(): void
     {
         $application = new NullApplication();
-        self::$container->set('hbpf.application.example', $application);
+        self::getContainer()->set('hbpf.application.example', $application);
 
         $response = (array) $this->sendPost('/applications/example/users/bar/install', []);
         self::assertEquals('200', $response['status']);
@@ -237,13 +236,11 @@ final class ApplicationControllerTest extends ControllerTestCaseAbstract
     {
         $mock = self::createPartialMock(ApplicationHandler::class, [$fn]);
         $mock->expects(self::any())->method($fn)->willThrowException(new Exception());
-        self::$container->set('hbpf._application.handler.application', $mock);
+        self::getContainer()->set('hbpf._application.handler.application', $mock);
     }
 
     /**
      * @param mixed[] $returnValue
-     *
-     * @throws Exception
      */
     private function mockApplicationHandler(array $returnValue = []): void
     {

@@ -32,7 +32,7 @@ final class NullOauthApplication extends OAuth1ApplicationAbstract
     /**
      * @return string
      */
-    public function getKey(): string
+    public function getName(): string
     {
         return 'null';
     }
@@ -40,7 +40,7 @@ final class NullOauthApplication extends OAuth1ApplicationAbstract
     /**
      * @return string
      */
-    public function getName(): string
+    public function getPublicName(): string
     {
         return 'Test';
     }

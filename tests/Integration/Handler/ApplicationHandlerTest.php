@@ -129,7 +129,7 @@ final class ApplicationHandlerTest extends DatabaseTestCaseAbstract
     {
         parent::setUp();
 
-        $this->handler = self::$container->get('hbpf._application.handler.application');
+        $this->handler = self::getContainer()->get('hbpf._application.handler.application');
     }
 
     /**
