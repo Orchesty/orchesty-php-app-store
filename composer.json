@@ -1,11 +1,11 @@
 {
-    "name": "hanaboso/app-store",
-    "description": "App store for PipesFramework",
+    "name": "orchesty/app-store",
+    "description": "Apps support for Orchesty",
     "license": "Apache-2.0",
     "version": "2.0.0",
     "require": {
         "php": "^8.1",
-        "hanaboso/pipes-php-sdk": "^2.0"
+        "orchesty/php-sdk": "^2.0"
     },
     "require-dev": {
         "hanaboso/php-check-utils": "^1.4",
