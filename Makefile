@@ -67,4 +67,6 @@ phpcoverage-ci:
 
 test: docker-up-force composer-install fasttest
 
+ci-test: test
+
 fasttest: phpcodesniffer clear-cache phpstan phpintegration phpcontroller phpcoverage-ci
