@@ -5,7 +5,9 @@ namespace HbPFAppStoreTests\Controller;
 use Exception;
 use Hanaboso\HbPFAppStore\Handler\ApplicationHandler;
 use Hanaboso\PipesPhpSdk\Application\Base\ApplicationAbstract;
+use Hanaboso\PipesPhpSdk\Application\Base\ApplicationInterface;
 use Hanaboso\PipesPhpSdk\Application\Document\ApplicationInstall;
+use Hanaboso\PipesPhpSdk\Authorization\Base\Basic\BasicApplicationInterface;
 use Hanaboso\Utils\File\File;
 use Hanaboso\Utils\String\Json;
 use HbPFAppStoreTests\ControllerTestCaseAbstract;
@@ -65,7 +67,7 @@ final class ApplicationControllerTest extends ControllerTestCaseAbstract
         $this->insertApp();
         $application = self::createMock(ApplicationAbstract::class);
         $application->method('toArray')->willReturn(['user' => 'bar']);
-        $application->method('getApplicationForm')->willReturn([]);
+        $application->method('getApplicationForms')->willReturn([]);
         self::getContainer()->set('hbpf.application.someApp', $application);
 
         $response = (array) $this->sendGet('/applications/someApp/users/bar');
@@ -207,11 +209,27 @@ final class ApplicationControllerTest extends ControllerTestCaseAbstract
     {
         $this->mockApplicationHandler(['new_passwd' => 'secret']);
 
-        self::$client->request('PUT', '/applications/someApp/users/bar/password', ['password' => 'Passw0rd']);
+        self::$client->request(
+            'PUT',
+            '/applications/someApp/users/bar/password',
+            [
+                'formKey' => ApplicationInterface::AUTHORIZATION_FORM,
+                'fieldKey' => BasicApplicationInterface::PASSWORD,
+                'password' => 'Passw0rd',
+            ],
+        );
         $response = self::$client->getResponse();
         self::assertEquals('200', $response->getStatusCode());
 
-        self::$client->request('PUT', '/applications/application/users/user/password', ['password' => 'Passw0rd']);
+        self::$client->request(
+            'PUT',
+            '/applications/application/users/user/password',
+            [
+                'formKey' => ApplicationInterface::AUTHORIZATION_FORM,
+                'fieldKey' => BasicApplicationInterface::PASSWORD,
+                'password' => 'Passw0rd',
+            ],
+        );
         $response = self::$client->getResponse();
         self::assertEquals('404', $response->getStatusCode());
     }

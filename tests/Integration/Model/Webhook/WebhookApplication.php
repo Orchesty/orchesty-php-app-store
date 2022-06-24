@@ -15,6 +15,7 @@ use Hanaboso\HbPFAppStore\Model\Webhook\WebhookSubscription;
 use Hanaboso\PipesPhpSdk\Application\Base\ApplicationAbstract;
 use Hanaboso\PipesPhpSdk\Application\Document\ApplicationInstall;
 use Hanaboso\PipesPhpSdk\Application\Model\Form\Form;
+use Hanaboso\PipesPhpSdk\Application\Model\Form\FormStack;
 use Hanaboso\Utils\String\Json;
 
 /**
@@ -98,15 +99,13 @@ final class WebhookApplication extends ApplicationAbstract implements WebhookApp
     }
 
     /**
-     * @param ApplicationInstall $applicationInstall
-     *
-     * @return Form
+     * @return FormStack
      */
-    public function getForm(ApplicationInstall $applicationInstall): Form
+    public function getFormStack(): FormStack
     {
-        $applicationInstall;
+        $formStack = new FormStack();
 
-        return new Form();
+        return $formStack->addForm(new Form('webhookForm','Webhook form'));
     }
 
     /**
@@ -209,14 +208,6 @@ final class WebhookApplication extends ApplicationAbstract implements WebhookApp
     public function getApplicationType(): string
     {
         return ApplicationTypeEnum::WEBHOOK;
-    }
-
-    /**
-     * @return Form
-     */
-    public function getSettingsForm(): Form
-    {
-        return new Form();
     }
 
 }
